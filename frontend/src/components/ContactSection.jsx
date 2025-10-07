@@ -111,21 +111,6 @@ const ContactSection = () => {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 border-blue-200">
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="text-blue-900" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg text-gray-900 mb-1">Address</h3>
-                      <p className="text-gray-600">24, Akbar Road</p>
-                      <p className="text-gray-600">New Delhi - 110011</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Social Links */}
               <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-900 to-blue-700">
                 <CardContent className="p-6 text-white">
