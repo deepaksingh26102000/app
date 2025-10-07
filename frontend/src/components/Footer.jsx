@@ -55,7 +55,7 @@ const Footer = () => {
             <h4 className="font-bold text-lg mb-4">Contact</h4>
             <ul className="space-y-2 text-blue-200 text-sm">
               <li>contact@merapmrahul.com</li>
-              <li>+91 11 2301 9080</li>
+              <li>+91 99883 65265</li>
               <li className="pt-2">
                 <span className="block font-semibold text-white mb-1">Follow Us:</span>
                 <div className="flex space-x-2">
