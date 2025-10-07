@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
