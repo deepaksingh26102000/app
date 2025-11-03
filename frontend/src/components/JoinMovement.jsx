@@ -6,6 +6,8 @@ import { Label } from './ui/label';
 import { Heart, Users, Building2, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL
+
 const JoinMovement = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', state: '' });
@@ -41,18 +43,39 @@ const JoinMovement = () => {
     }
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Generate supporter card
+    
     const card = {
-      id: `MPR${Date.now()}`,
       ...formData,
+      mobile_number: formData.phone,
       category: selectedCategory,
-      date: new Date().toLocaleDateString('en-IN')
     };
-    setSupporterCard(card);
-    // Reset form
-    setFormData({ name: '', email: '', phone: '', state: '' });
+
+    const API_ENDPOINT = `${BASE_URL}/user`;
+
+    try {
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(card),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      setSupporterCard(card);
+      setFormData({ name: "", email: "", phone: "", state: "" });
+    } else {
+      console.error("❌ Backend error:", result.error);
+      alert("Failed to save supporter. Please try again.");
+    }
+  } catch (err) {
+    console.error("⚠️ Network error:", err);
+    alert("Something went wrong. Please check your connection.");
+  }
   };
 
   const downloadCard = () => {

@@ -19,12 +19,11 @@ app.get("/users", async (req, res) => {
   res.json(data);
 });
 
-// ✅ Example route: Insert data
-app.post("/users", async (req, res) => {
-  const { name, email } = req.body;
-  const { data, error } = await supabase.from("users").insert([{ name, email }]);
-
-  if (error) return res.status(400).json({ error: error.message });
+// Add Volunteer
+app.post("/user", async (req, res) => {
+  const { name, email, mobile_number, state, category } = req.body;
+  const { data, error } = await supabase.from("users").insert([{ name, email, mobile_number, state, category }]);
+  if (error) return res.status(400).json({ error: error?.message });
   res.json(data);
 });
 

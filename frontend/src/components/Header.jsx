@@ -53,9 +53,9 @@ const Header = () => {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
-            <Button variant="outline" className="border-blue-900 text-blue-900 hover:bg-blue-50">
+            {/* <Button variant="outline" className="border-blue-900 text-blue-900 hover:bg-blue-50">
               Login
-            </Button>
+            </Button> */}
             <Button className="bg-blue-900 text-white hover:bg-blue-800">
               Join Now
             </Button>
@@ -83,9 +83,9 @@ const Header = () => {
                   {item.label}
                 </button>
               ))}
-              <Button variant="outline" className="border-blue-900 text-blue-900 w-full mt-3">
+              {/* <Button variant="outline" className="border-blue-900 text-blue-900 w-full mt-3">
                 Login
-              </Button>
+              </Button> */}
               <Button className="bg-blue-900 text-white w-full">
                 Join Now
               </Button>
