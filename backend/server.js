@@ -21,8 +21,8 @@ app.get("/users", async (req, res) => {
 
 // Add Volunteer
 app.post("/user", async (req, res) => {
-  const { name, email, mobile_number, state, category } = req.body;
-  const { data, error } = await supabase.from("users").insert([{ name, email, mobile_number, state, category }]);
+  const { name, email, mobile_number, state, category, pledge } = req.body;
+  const { data, error } = await supabase.from("users").insert([{ name, email, mobile_number, state, category, pledge }]);
   if (error) return res.status(400).json({ error: error?.message });
   res.json(data);
 });

@@ -56,7 +56,7 @@ const Header = () => {
             {/* <Button variant="outline" className="border-blue-900 text-blue-900 hover:bg-blue-50">
               Login
             </Button> */}
-            <Button className="bg-blue-900 text-white hover:bg-blue-800">
+            <Button onClick={() => scrollToSection('#join')} className="bg-blue-900 text-white hover:bg-blue-800">
               Join Now
             </Button>
           </div>
@@ -86,7 +86,7 @@ const Header = () => {
               {/* <Button variant="outline" className="border-blue-900 text-blue-900 w-full mt-3">
                 Login
               </Button> */}
-              <Button className="bg-blue-900 text-white w-full">
+              <Button onClick={() => scrollToSection('#join')} className="bg-blue-900 text-white w-full">
                 Join Now
               </Button>
             </div>

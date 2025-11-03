@@ -14,6 +14,7 @@ import Footer from '../components/Footer';
 
 const HomePage = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     setIsVisible(true);
@@ -22,9 +23,9 @@ const HomePage = () => {
   return (
     <div className={`home-page ${isVisible ? 'fade-in-up' : ''}`}>
       <Header />
-      <HeroSection />
+      <HeroSection setSelectedCategory={setSelectedCategory} />
       <AboutSection />
-      <JoinMovement />
+      <JoinMovement selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>
       <PledgeWall />
       <StoriesSection />
       <EventsSection />

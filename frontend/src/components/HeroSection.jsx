@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Heart, Users, Flag } from 'lucide-react';
 import { mockData } from '../mock';
+import writeOnTwitter from '@/utils/writeOnTwitter';
 
-const HeroSection = () => {
+const HeroSection = ({setSelectedCategory=()=>{}}) => {
   const [pledgeCount, setPledgeCount] = useState(0);
 
   // Animated counter effect
@@ -25,6 +26,13 @@ const HeroSection = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  const scrollToSection = (href) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
@@ -56,6 +64,7 @@ const HeroSection = () => {
           <div className="flex flex-wrap gap-4 mb-12">
             <Button
               size="lg"
+              onClick={() => scrollToSection('#join')}
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-6 text-lg shadow-xl"
             >
               <Heart className="mr-2" size={20} />
@@ -64,6 +73,7 @@ const HeroSection = () => {
             <Button
               size="lg"
               variant="outline"
+              onClick={writeOnTwitter}
               className="bg-white/10 backdrop-blur-sm text-white border-white/50 hover:bg-white/20 font-semibold px-8 py-6 text-lg"
             >
               Share Your Story
@@ -71,6 +81,7 @@ const HeroSection = () => {
             <Button
               size="lg"
               variant="outline"
+              onClick={()=> setSelectedCategory('volunteer')}
               className="bg-white/10 backdrop-blur-sm text-white border-white/50 hover:bg-white/20 font-semibold px-8 py-6 text-lg"
             >
               <Users className="mr-2" size={20} />

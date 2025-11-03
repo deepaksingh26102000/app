@@ -8,6 +8,9 @@ import { MessageSquare, MapPin } from 'lucide-react';
 import { mockData } from '../mock';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL
+const API_ENDPOINT = `${BASE_URL}/user`;
+
 const PledgeWall = () => {
   const [selectedState, setSelectedState] = useState('All');
   const [showPledgeForm, setShowPledgeForm] = useState(false);
@@ -17,11 +20,29 @@ const PledgeWall = () => {
     ? mockData.pledges
     : mockData.pledges.filter(p => p.state === selectedState);
 
-  const handlePledgeSubmit = (e) => {
+  const handlePledgeSubmit = async(e) => {
     e.preventDefault();
-    alert('Your pledge has been recorded! (Backend integration pending)');
-    setPledgeForm({ name: '', state: '', message: '' });
-    setShowPledgeForm(false);
+    const card = {
+      ...pledgeForm,
+      pledge: pledgeForm?.message,
+    };
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(card),
+      });
+
+      if (response.ok) {
+        setShowPledgeForm(false);
+        setPledgeForm({ name: '', state: '', message: '' });
+        alert('Your pledge has been recorded!');
+      }
+    } catch (err) {
+      alert("Something went wrong. Please check your connection.");
+    }
   };
 
   return (

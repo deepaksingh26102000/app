@@ -90,14 +90,14 @@ const AboutSection = () => {
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-12">
+        {/* <div className="text-center mt-12">
           <Button
             size="lg"
             className="bg-blue-900 hover:bg-blue-800 text-white px-10 py-6 text-lg font-semibold shadow-xl"
           >
             Read Rahul's Vision
           </Button>
-        </div>
+        </div> */}
       </div>
     </section>
   );

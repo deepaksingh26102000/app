@@ -3,15 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Heart, Users, Building2, X } from 'lucide-react';
+import { Heart, Users, Building2, X, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL
+const phoneRegex = /^[6-9]\d{9}$/;
 
-const JoinMovement = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+const JoinMovement = ({selectedCategory,setSelectedCategory}) => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', state: '' });
   const [supporterCard, setSupporterCard] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categories = [
     {
@@ -21,7 +22,7 @@ const JoinMovement = () => {
       titleHindi: 'समर्थक',
       description: 'Citizens and admirers of Rahul Gandhi',
       color: 'from-red-500 to-pink-500',
-      buttonText: 'Sign the Pledge'
+      buttonText: 'Become a Supporter'
     },
     {
       id: 'volunteer',
@@ -52,6 +53,13 @@ const JoinMovement = () => {
       category: selectedCategory,
     };
 
+    if (card?.mobile_number && !phoneRegex.test(card?.mobile_number)) {
+      alert("Please enter a valid 10-digit mobile number");
+      return;
+    }
+
+    setIsSubmitting(true);
+
     const API_ENDPOINT = `${BASE_URL}/user`;
 
     try {
@@ -69,12 +77,13 @@ const JoinMovement = () => {
       setSupporterCard(card);
       setFormData({ name: "", email: "", phone: "", state: "" });
     } else {
-      console.error("❌ Backend error:", result.error);
       alert("Failed to save supporter. Please try again.");
     }
   } catch (err) {
     console.error("⚠️ Network error:", err);
     alert("Something went wrong. Please check your connection.");
+  } finally {
+    setIsSubmitting(false);
   }
   };
 
@@ -138,12 +147,12 @@ const JoinMovement = () => {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-2xl text-blue-900">
-              {selectedCategory === 'supporter' && 'Sign the Pledge'}
+              {selectedCategory === 'supporter' && 'Become a Supporter'}
               {selectedCategory === 'volunteer' && 'Become a Volunteer'}
               {selectedCategory === 'worker' && 'Connect Your Booth'}
             </DialogTitle>
             <DialogDescription>
-              Fill in your details to join the movement. You'll receive a digital supporter card.
+              Fill in your details to join the movement. You'll receive a digital {selectedCategory} card.
             </DialogDescription>
           </DialogHeader>
 
@@ -176,7 +185,7 @@ const JoinMovement = () => {
                 required
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+91 XXXXX XXXXX"
+                placeholder="94XXX XXXXX"
               />
             </div>
             <div>
@@ -190,7 +199,9 @@ const JoinMovement = () => {
               />
             </div>
             <Button type="submit" className="w-full bg-blue-900 hover:bg-blue-800">
-              Submit & Get Supporter Card
+              {isSubmitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+              ):"Submit & Get {selectedCategory} Card"}
             </Button>
           </form>
         </DialogContent>
