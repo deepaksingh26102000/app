@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CONSTANTS from '../constants';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
@@ -7,13 +8,22 @@ import { Label } from './ui/label';
 import { MessageSquare, MapPin } from 'lucide-react';
 import { mockData } from '../mock';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select"
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL
+const STATES = CONSTANTS.states
 const API_ENDPOINT = `${BASE_URL}/user`;
 
 const PledgeWall = () => {
   const [selectedState, setSelectedState] = useState('All');
   const [showPledgeForm, setShowPledgeForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [pledgeForm, setPledgeForm] = useState({ name: '', state: '', message: '' });
 
   const filteredPledges = selectedState === 'All'
@@ -22,6 +32,7 @@ const PledgeWall = () => {
 
   const handlePledgeSubmit = async(e) => {
     e.preventDefault();
+    setIsSubmitting(true)
     const card = {
       ...pledgeForm,
       pledge: pledgeForm?.message,
@@ -42,6 +53,8 @@ const PledgeWall = () => {
       }
     } catch (err) {
       alert("Something went wrong. Please check your connection.");
+    } finally {
+      setIsSubmitting(false)
     }
   };
 
@@ -158,13 +171,22 @@ const PledgeWall = () => {
             </div>
             <div>
               <Label htmlFor="pledge-state">State *</Label>
-              <Input
-                id="pledge-state"
+              <Select
                 required
                 value={pledgeForm.state}
-                onChange={(e) => setPledgeForm({ ...pledgeForm, state: e.target.value })}
-                placeholder="Your state"
-              />
+                onValueChange={(value) => setPledgeForm({ ...pledgeForm, state: value })}
+              >
+                <SelectTrigger id="state" className="w-full">
+                  <SelectValue placeholder="Select your state" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60 overflow-y-auto">
+                  {STATES.map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label htmlFor="pledge-message">Your Pledge *</Label>

@@ -5,8 +5,17 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Heart, Users, Building2, X, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
+import CONSTANTS from '../constants';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select"
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL
+const STATES = CONSTANTS.states
 const phoneRegex = /^[6-9]\d{9}$/;
 
 const JoinMovement = ({selectedCategory,setSelectedCategory}) => {
@@ -190,18 +199,34 @@ const JoinMovement = ({selectedCategory,setSelectedCategory}) => {
             </div>
             <div>
               <Label htmlFor="state">State *</Label>
-              <Input
+              {/* <Input
                 id="state"
                 required
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                 placeholder="Your state"
-              />
+              /> */}
+              <Select
+                required
+                value={formData.state}
+                onValueChange={(value) => setFormData({ ...formData, state: value })}
+              >
+                <SelectTrigger id="state" className="w-full">
+                  <SelectValue placeholder="Select your state" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60 overflow-y-auto">
+                  {STATES.map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <Button type="submit" className="w-full bg-blue-900 hover:bg-blue-800">
               {isSubmitting ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
-              ):"Submit & Get {selectedCategory} Card"}
+              ):`Submit & Get ${selectedCategory} Card`}
             </Button>
           </form>
         </DialogContent>

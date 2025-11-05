@@ -29,7 +29,7 @@ const HomePage = () => {
       <PledgeWall />
       <StoriesSection />
       <EventsSection />
-      <YouthHub />
+      {/* <YouthHub /> */}
       <SocialMediaWall />
       <MediaLibrary />
       <ContactSection />
