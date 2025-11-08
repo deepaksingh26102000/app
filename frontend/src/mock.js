@@ -2,7 +2,7 @@
 
 export const mockData = {
   // Live counter
-  pledgeCount: 1248936,
+  pledgeCount: 5342,
 
   // Stories from supporters
   stories: [

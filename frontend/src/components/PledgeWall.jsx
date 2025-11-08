@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CONSTANTS from '../constants';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
@@ -25,10 +25,37 @@ const PledgeWall = () => {
   const [showPledgeForm, setShowPledgeForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pledgeForm, setPledgeForm] = useState({ name: '', state: '', message: '' });
+  const [data, setData] = useState([]);
+  const [stateCount, setStateCount] = useState([]);
+
+  useEffect(() => {
+    const fetchPledge = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/pledges`);
+        const k = await response.json();
+        setData(k);
+      } catch (error) {
+        console.error("Error fetching media:", error);
+      }
+    };
+
+    const fetchPledgeCount = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/pledges/state_summary`);
+        const k = await response.json();
+        setStateCount(k);
+      } catch (error) {
+        console.error("Error fetching media:", error);
+      }
+    };
+
+    fetchPledge();
+    fetchPledgeCount();
+  }, []);
 
   const filteredPledges = selectedState === 'All'
-    ? mockData.pledges
-    : mockData.pledges.filter(p => p.state === selectedState);
+    ? data
+    : data?.filter(p => p.state === selectedState);
 
   const handlePledgeSubmit = async(e) => {
     e.preventDefault();
@@ -36,6 +63,7 @@ const PledgeWall = () => {
     const card = {
       ...pledgeForm,
       pledge: pledgeForm?.message,
+      category: 'pledge',
     };
     try {
       const response = await fetch(API_ENDPOINT, {
@@ -85,18 +113,18 @@ const PledgeWall = () => {
             Pledges Across India
           </h3>
           <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {mockData.stateData.slice(0, 15).map((stateInfo) => (
+            {stateCount?.slice(0, 15).map((stateInfo) => (
               <div
-                key={stateInfo.state}
+                key={stateInfo?.state}
                 className="bg-blue-50 rounded-lg p-4 hover:bg-blue-100 transition-colors cursor-pointer"
-                onClick={() => setSelectedState(stateInfo.state)}
+                onClick={() => setSelectedState(stateInfo?.state)}
               >
                 <div className="flex items-center mb-2">
                   <MapPin className="text-blue-600 mr-2" size={16} />
-                  <p className="font-semibold text-sm text-gray-800">{stateInfo.state}</p>
+                  <p className="font-semibold text-sm text-gray-800">{stateInfo?.state}</p>
                 </div>
                 <p className="text-2xl font-bold text-blue-900">
-                  {stateInfo.pledges.toLocaleString('en-IN')}
+                  {stateInfo?.pledges?.toLocaleString('en-IN')}
                 </p>
                 <p className="text-xs text-gray-600">pledges</p>
               </div>
@@ -128,19 +156,19 @@ const PledgeWall = () => {
         {/* Pledge Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredPledges.map((pledge) => (
-            <Card key={pledge.id} className="card-hover border-2 border-blue-100">
+            <Card key={pledge?.id} className="card-hover border-2 border-blue-100">
               <CardContent className="p-6">
                 <div className="mb-4">
                   <MessageSquare className="text-blue-600 mb-3" size={24} />
                   <p className="text-gray-700 italic leading-relaxed">
-                    "{pledge.message}"
+                    "{pledge?.pledge}"
                   </p>
                 </div>
                 <div className="border-t pt-4">
-                  <p className="font-semibold text-gray-900">{pledge.name}</p>
+                  <p className="font-semibold text-gray-900">{pledge?.name}</p>
                   <p className="text-sm text-blue-700 flex items-center mt-1">
                     <MapPin size={14} className="mr-1" />
-                    {pledge.state}
+                    {pledge?.state}
                   </p>
                 </div>
               </CardContent>

@@ -1,21 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Heart, MessageCircle } from 'lucide-react';
-import { mockData } from '../mock';
+import writeOnTwitter from '@/utils/writeOnTwitter';
+
+const getPlatformColor = (platform) => {
+  switch (platform) {
+    case 'twitter':
+      return 'bg-blue-400';
+    case 'instagram':
+      return 'bg-gradient-to-br from-purple-500 to-pink-500';
+    case 'facebook':
+      return 'bg-blue-600';
+    default:
+      return 'bg-gray-500';
+  }
+};
+
+const BASE_URL = process.env.REACT_APP_BACKEND_URL
 
 const SocialMediaWall = () => {
-  const getPlatformColor = (platform) => {
-    switch (platform) {
-      case 'twitter':
-        return 'bg-blue-400';
-      case 'instagram':
-        return 'bg-gradient-to-br from-purple-500 to-pink-500';
-      case 'facebook':
-        return 'bg-blue-600';
-      default:
-        return 'bg-gray-500';
-    }
-  };
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchSocialPosts = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/social_posts`);
+        const k = await response.json();
+        setData(k);
+      } catch (error) {
+        console.error("Error fetching social_posts:", error);
+      }
+    };
+    fetchSocialPosts();
+  }, []);
 
   return (
     <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
@@ -35,23 +52,23 @@ const SocialMediaWall = () => {
 
         {/* Social Feed Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {mockData.socialFeed.map((post) => (
-            <Card key={post.id} className="card-hover border-0 shadow-lg">
+          {data?.map((post) => (
+            <Card key={post?.id} className="card-hover border-0 shadow-lg">
               <CardContent className="p-6">
                 <div className="flex items-center mb-4">
-                  <div className={`w-10 h-10 rounded-full ${getPlatformColor(post.platform)} flex items-center justify-center text-white font-bold text-sm`}>
-                    {post.platform[0].toUpperCase()}
+                  <div className={`w-10 h-10 rounded-full ${getPlatformColor(post?.platform)} flex items-center justify-center text-white font-bold text-sm`}>
+                    {post?.platform[0].toUpperCase()}
                   </div>
                   <div className="ml-3">
-                    <p className="font-semibold text-gray-900">{post.username}</p>
-                    <p className="text-sm text-gray-500">{post.timestamp}</p>
+                    <p className="font-semibold text-gray-900">{post?.username}</p>
+                    <p className="text-sm text-gray-500">{post?.readable_date?.toString()}</p>
                   </div>
                 </div>
-                <p className="text-gray-700 mb-4 leading-relaxed">{post.content}</p>
+                <p className="text-gray-700 mb-4 leading-relaxed">{post?.content}</p>
                 <div className="flex items-center space-x-4 text-gray-500">
                   <div className="flex items-center">
                     <Heart size={18} className="mr-1" />
-                    <span className="text-sm">{post.likes}</span>
+                    <span className="text-sm">{post?.likes}</span>
                   </div>
                   <div className="flex items-center">
                     <MessageCircle size={18} className="mr-1" />
@@ -72,6 +89,7 @@ const SocialMediaWall = () => {
             {['#MeraPMRahul', '#TruthOverFear', '#BharatJodoYatra', '#NyayKiRaajneeti', '#RahulGandhi'].map((tag) => (
               <span
                 key={tag}
+                onClick={()=>writeOnTwitter(tag)}
                 className="bg-blue-100 text-blue-900 px-4 py-2 rounded-full font-semibold hover:bg-blue-200 transition-colors cursor-pointer"
               >
                 {tag}
