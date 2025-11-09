@@ -114,7 +114,7 @@ app.get("/featured_stories", async (req, res) => {
 // Add Volunteer, Supporter, worker, pledge
 app.post("/user", async (req, res) => {
   const { name, email, mobile_number, state, category, pledge } = req.body;
-  const { data, error } = await supabase.from("users").insert([{ name, email, mobile_number, state, category, pledge }]);
+  const { data, error } = await supabase.from("users").insert([{ name, email, mobile_number, state, category, pledge }]).select();
   if (error) return res.status(400).json({ error: error?.message });
   res.json(data);
 });
