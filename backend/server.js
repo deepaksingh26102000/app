@@ -11,6 +11,24 @@ app.use(express.json());
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
+app.post("/events/:id/rsvp", async (req, res) => {
+  const eventId = req.params.id;
+
+  const { data, error } = await supabase.rpc("increment_rsvp", {
+    event_id_param: Number(eventId),
+  });
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  res.json({
+    success: true,
+    new_rsvp_count: data,
+  });
+});
+
+
 // get all stories
 app.get("/stories", async (req, res) => {
   const { data, error } = await supabase.from("stories").select("*").eq("is_listed", true);

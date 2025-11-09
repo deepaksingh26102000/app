@@ -5,12 +5,54 @@ import { Calendar, MapPin, Clock, Users } from 'lucide-react';
 import { mockData } from '../mock';
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL
+const RSVP_CACHE_KEY = "rsvp_events";
+
+export function getGoogleCalendarLink(event) {
+  const start = new Date(`${event.date}T${event.time}`);
+  const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+  const format = (d: Date) =>
+    d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+  return (
+    `https://www.google.com/calendar/render?action=TEMPLATE` +
+    `&text=${encodeURIComponent(event?.title)}` +
+    `&dates=${format(start)}/${format(end)}` +
+    `&details=${encodeURIComponent(event?.description || "")}` +
+    `&location=${encodeURIComponent(event?.location || "")}`
+  );
+}
+
+export function generateICS(event) {
+  const start = new Date(`${event.date}T${event.time}`);
+  const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+  return `BEGIN:VCALENDAR
+  VERSION:2.0
+  BEGIN:VEVENT
+  DTSTART:${start
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .split(".")[0] + "Z"}
+  DTEND:${end
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .split(".")[0] + "Z"}
+  SUMMARY:${event.title}
+  DESCRIPTION:${event.description || ""}
+  LOCATION:${event.location || ""}
+  END:VEVENT
+  END:VCALENDAR`;
+  }
+
 
 const EventsSection = () => {
   const [selectedState, setSelectedState] = useState('All');
   const [data, setData] = useState([]);
+  const [rsvpCache, setRsvpCache] = useState({});
 
   useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem(RSVP_CACHE_KEY) || "{}");
     const fetchEvents = async () => {
       try {
         const response = await fetch(`${BASE_URL}/events`);
@@ -21,14 +63,54 @@ const EventsSection = () => {
       }
     };
     fetchEvents();
+    setRsvpCache(saved);
   }, []);
 
   const filteredEvents = selectedState === 'All'
     ? data
     : data.filter(e => e.state === selectedState);
 
-  const handleRSVP = (eventId) => {
-    alert(`RSVP recorded for event ${eventId}. Full implementation coming in backend phase.`);
+  const handleRSVP = async (event) => {
+    const eventId = event.id;
+    if (rsvpCache[eventId]) return;
+
+    const gCalUrl = getGoogleCalendarLink(event);
+    window.open(gCalUrl, "_blank");
+
+    try {
+      const res = await fetch(`${BASE_URL}/events/${eventId}/rsvp`, {
+        method: "POST",
+      });
+
+      const json = await res.json();
+
+      if (json?.new_rsvp_count !== undefined) {
+        setData((prev) =>
+          prev.map((e) =>
+            e.id === eventId
+              ? { ...e, rsvp_count: json.new_rsvp_count }
+              : e
+          )
+        );
+      }
+    } catch (err) {
+      console.error("RSVP count update failed:", err);
+    }
+
+    
+    // Download ICS
+    const ics = generateICS(event);
+    const blob = new Blob([ics], { type: "text/calendar" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${event.title}.ics`;
+    a.click();
+
+    const updatedCache = { ...rsvpCache, [eventId]: true };
+    setRsvpCache(updatedCache);
+    localStorage.setItem(RSVP_CACHE_KEY, JSON.stringify(updatedCache));
   };
 
   return (
@@ -107,17 +189,22 @@ const EventsSection = () => {
                   </div>
                   <div className="flex items-center text-gray-700">
                     <Users className="mr-3 text-blue-600" size={20} />
-                    <span className="font-medium">{event?.rsvpCount?.toLocaleString('en-IN')} attending</span>
+                    <span className="font-medium">{event?.rsvp_count?.toLocaleString('en-IN')} attending</span>
                   </div>
                 </div>
                 <p className="text-gray-600 mb-6 leading-relaxed">
                   {event.description}
                 </p>
                 <Button
-                  onClick={() => handleRSVP(event.id)}
-                  className="w-full bg-blue-900 hover:bg-blue-800 font-semibold"
+                  onClick={() => handleRSVP(event)}
+                  disabled={!!rsvpCache[event.id]}
+                  className={`w-full font-semibold ${
+                    rsvpCache[event.id]
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-900 hover:bg-blue-800"
+                  }`}
                 >
-                  RSVP Now
+                  {rsvpCache[event.id] ? "Already RSVP’d" : "RSVP Now"}
                 </Button>
               </CardContent>
             </Card>
