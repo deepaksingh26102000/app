@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { Button } from './ui/button';
 import { Calendar, MapPin, Clock, Users } from 'lucide-react';
 import { mockData } from '../mock';
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL
+
 const EventsSection = () => {
   const [selectedState, setSelectedState] = useState('All');
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/events`);
+        const k = await response.json();
+        setData(k);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+    fetchEvents();
+  }, []);
 
   const filteredEvents = selectedState === 'All'
-    ? mockData.events
-    : mockData.events.filter(e => e.state === selectedState);
+    ? data
+    : data.filter(e => e.state === selectedState);
 
   const handleRSVP = (eventId) => {
     alert(`RSVP recorded for event ${eventId}. Full implementation coming in backend phase.`);
@@ -54,7 +70,7 @@ const EventsSection = () => {
 
         {/* Events Grid */}
         <div className="grid md:grid-cols-2 gap-8">
-          {filteredEvents.map((event) => (
+          {filteredEvents?.map((event) => (
             <Card key={event.id} className="card-hover border-2 border-blue-100">
               <CardHeader>
                 <div className="flex items-start justify-between">
@@ -91,7 +107,7 @@ const EventsSection = () => {
                   </div>
                   <div className="flex items-center text-gray-700">
                     <Users className="mr-3 text-blue-600" size={20} />
-                    <span className="font-medium">{event.rsvpCount.toLocaleString('en-IN')} attending</span>
+                    <span className="font-medium">{event?.rsvpCount?.toLocaleString('en-IN')} attending</span>
                   </div>
                 </div>
                 <p className="text-gray-600 mb-6 leading-relaxed">

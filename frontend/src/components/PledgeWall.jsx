@@ -6,7 +6,6 @@ import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { MessageSquare, MapPin } from 'lucide-react';
-import { mockData } from '../mock';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import {
   Select,

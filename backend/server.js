@@ -11,14 +11,7 @@ app.use(express.json());
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// ✅ Example route: Fetch data from a table
-app.get("/users", async (req, res) => {
-  const { data, error } = await supabase.from("users").select("*");
-
-  if (error) return res.status(400).json({ error: error.message });
-  res.json(data);
-});
-
+// get all stories
 app.get("/stories", async (req, res) => {
   const { data, error } = await supabase.from("stories").select("*").eq("is_listed", true);
 
@@ -26,6 +19,15 @@ app.get("/stories", async (req, res) => {
   res.json(data);
 });
 
+// get all events
+app.get("/events", async (req, res) => {
+  const { data, error } = await supabase.from("events").select("*");
+
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+// get all social posts
 app.get("/social_posts", async (req, res) => {
   const { data, error } = await supabase.from("social_posts").select("*");
 
@@ -43,6 +45,8 @@ app.get("/social_posts", async (req, res) => {
   res.json(formatted);
 });
 
+
+// get all media
 app.get("/media", async (req, res) => {
   const { data, error } = await supabase.from("media").select("*").eq("is_listed", true);
 
@@ -51,6 +55,8 @@ app.get("/media", async (req, res) => {
   res.json(data);
 });
 
+
+// get all pledges
 app.get("/pledges", async (req, res) => {
   const { data, error } = await supabase.from("users").select("*").eq("category", 'pledge'); ;
 
@@ -59,6 +65,8 @@ app.get("/pledges", async (req, res) => {
   res.json(data);
 });
 
+
+// get pledge count by state
 app.get("/pledges/state_summary", async (req, res) => {
   const { data, error } = await supabase.rpc("get_pledges_by_state");
 
@@ -67,6 +75,8 @@ app.get("/pledges/state_summary", async (req, res) => {
   res.json(data);
 });
 
+
+// get featured media
 app.get("/featured_media", async (req, res) => {
   const { data, error } = await supabase.from("media").select("*").eq("is_featured", true); ;
 
@@ -75,6 +85,7 @@ app.get("/featured_media", async (req, res) => {
 });
 
 
+// get featured story
 app.get("/featured_stories", async (req, res) => {
   const { data, error } = await supabase.from("stories").select("*").eq("is_featured", true); ;
 
@@ -82,7 +93,7 @@ app.get("/featured_stories", async (req, res) => {
   res.json(data);
 });
 
-// Add Volunteer
+// Add Volunteer, Supporter, worker, pledge
 app.post("/user", async (req, res) => {
   const { name, email, mobile_number, state, category, pledge } = req.body;
   const { data, error } = await supabase.from("users").insert([{ name, email, mobile_number, state, category, pledge }]);
