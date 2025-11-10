@@ -80,7 +80,7 @@ const AboutSection = () => {
             className="w-full h-96 object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-transparent flex items-center">
-            <div className="px-12 max-w-2xl">
+            <div className="px-12 max-w-3xl">
               <blockquote className="text-3xl font-bold text-white mb-4 leading-tight">
                 "मैं नफरत के बाजार में मोहब्बत की दुकान खोल रहा हूं"
               </blockquote>

@@ -6,6 +6,29 @@ import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Mail, Phone, Loader2 } from 'lucide-react';
 
+const SOCIAL_ICONS = {
+  Twitter: (
+    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+      <path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0016 .64a4.48 4.48 0 00-4.4 5.52A12.94 12.94 0 013 2.24s-4 9 5 13a13.06 13.06 0 01-8 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+    </svg>
+  ),
+  Instagram: (
+    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+      <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5a5 5 0 110 10 5 5 0 010-10zm6.5-.1a1.1 1.1 0 110-2.2 1.1 1.1 0 010 2.2z"/>
+    </svg>
+  ),
+  Facebook: (
+    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+      <path d="M22 12a10 10 0 10-11.5 9.9v-7h-2v-3h2V9.5a3 3 0 013.2-3.3c.9 0 1.8.1 1.8.1v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3h-2v7A10 10 0 0022 12z"/>
+    </svg>
+  ),
+  YouTube: (
+    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+      <path d="M19.8 7.2c-.2-1.4-1.4-2.5-2.8-2.7C14.6 4 12 4 12 4s-2.6 0-4.9.5c-1.4.2-2.6 1.3-2.8 2.7C4 9.5 4 12 4 12s0 2.5.3 4.8c.2 1.4 1.4 2.5 2.8 2.7C9.4 20 12 20 12 20s2.6 0 4.9-.5c1.4-.2 2.6-1.3 2.8-2.7.3-2.3.3-4.8.3-4.8s0-2.5-.3-4.8zM10 15V9l5 3-5 3z"/>
+    </svg>
+  )
+};
+
 const BASE_URL = process.env.REACT_APP_BACKEND_URL
 const API_ENDPOINT = `${BASE_URL}/user`;
 
@@ -116,7 +139,7 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg text-gray-900 mb-1">Email</h3>
-                      <p className="text-gray-600">contact@merapmrahul.com</p>
+                      <p className="text-gray-600">join.merapmrahul@gmail.com</p>
                       <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
                     </div>
                   </div>
@@ -131,7 +154,7 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg text-gray-900 mb-1">Phone</h3>
-                      <p className="text-gray-600">+91 99883 65265</p>
+                      <p className="text-gray-600">+91 91315 95022</p>
                       <p className="text-sm text-gray-500 mt-1">Mon-Sat, 9 AM - 6 PM IST</p>
                     </div>
                   </div>
@@ -146,9 +169,9 @@ const ContactSection = () => {
                     {['Twitter', 'Instagram', 'Facebook', 'YouTube'].map((platform) => (
                       <button
                         key={platform}
-                        className="w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-colors"
+                        className="w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-colors text-xl"
                       >
-                        <span className="text-sm font-semibold">{platform[0]}</span>
+                        {SOCIAL_ICONS[platform]}
                       </button>
                     ))}
                   </div>
