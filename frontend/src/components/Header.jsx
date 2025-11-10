@@ -30,7 +30,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-gradient-to-br from-orange-500 via-white to-green-600 rounded-full flex items-center justify-center font-bold text-blue-900 text-xl shadow-lg">
-              MP
+              RG
             </div>
             <div>
               <h1 className="text-xl font-bold text-blue-900">MeraPMRahul</h1>

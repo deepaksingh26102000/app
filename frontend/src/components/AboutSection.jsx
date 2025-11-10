@@ -75,16 +75,16 @@ const AboutSection = () => {
         {/* Image with Quote */}
         <div className="relative rounded-3xl overflow-hidden shadow-2xl max-w-5xl mx-auto">
           <img
-            src="https://images.unsplash.com/photo-1610420796786-ca936a236e40"
+            src="https://qfmdmxmcybtllycxygdd.supabase.co/storage/v1/object/public/media/story_1762795485880.png"
             alt="Justice and Unity"
             className="w-full h-96 object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-transparent flex items-center">
             <div className="px-12 max-w-2xl">
               <blockquote className="text-3xl font-bold text-white mb-4 leading-tight">
-                "Leadership is not about power. It's about service, truth, and standing with those who need you most."
+                "मैं नफरत के बाजार में मोहब्बत की दुकान खोल रहा हूं"
               </blockquote>
-              <p className="text-white/90 text-lg">— Rahul Gandhi</p>
+              <p className="text-white/90 text-lg">— राहुल गांधी</p>
             </div>
           </div>
         </div>

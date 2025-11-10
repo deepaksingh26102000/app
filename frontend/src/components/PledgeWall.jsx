@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { MessageSquare, MapPin } from 'lucide-react';
+import { MessageSquare, MapPin, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import {
   Select,
@@ -226,8 +226,10 @@ const PledgeWall = () => {
                 placeholder="I believe in truth and justice. I believe in Rahul Gandhi's India. #MeraPMRahul"
               />
             </div>
-            <Button type="submit" className="w-full bg-blue-900 hover:bg-blue-800">
-              Submit Pledge
+            <Button type="submit" disabled={isSubmitting} className="w-full bg-blue-900 hover:bg-blue-800">
+              {isSubmitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+              ):`Submit Pledge`}
             </Button>
           </form>
         </DialogContent>

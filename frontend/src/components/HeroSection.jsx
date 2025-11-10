@@ -39,7 +39,7 @@ const HeroSection = ({setSelectedCategory=()=>{}}) => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1723056416893-e38cdbd35685"
+          src="https://qfmdmxmcybtllycxygdd.supabase.co/storage/v1/object/public/media/story_1762794999187.png"
           alt="People's Movement"
           className="w-full h-full object-cover"
         />

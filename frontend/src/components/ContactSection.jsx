@@ -4,15 +4,37 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Loader2 } from 'lucide-react';
+
+const BASE_URL = process.env.REACT_APP_BACKEND_URL
+const API_ENDPOINT = `${BASE_URL}/user`;
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Thank you for contacting us! We will get back to you soon. (Backend integration pending)');
-    setFormData({ name: '', email: '', message: '' });
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({...formData, category: 'contact'}),
+      });
+
+      if (response.ok) {
+        setFormData({ name: '', email: '', message: '' });
+        alert('Thank you for contacting us! We will get back to you soon.');
+      }
+    } catch (err) {
+      alert("Something went wrong. Please check your connection.");
+    } finally {
+      setIsSubmitting(false)
+    }
   };
 
   return (
@@ -71,9 +93,14 @@ const ContactSection = () => {
                   </div>
                   <Button
                     type="submit"
+                    disabled={isSubmitting}
                     className="w-full bg-blue-900 hover:bg-blue-800 font-semibold py-6"
                   >
-                    Send Message
+                    {isSubmitting ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                      ):
+                      `Send Message`
+                    }
                   </Button>
                 </form>
               </CardContent>

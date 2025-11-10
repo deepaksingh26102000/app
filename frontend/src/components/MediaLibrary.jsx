@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { Button } from './ui/button';
 import { FileVideo, Image as ImageIcon, Headphones, FileText, Download } from 'lucide-react';
-import { mockData } from '../mock';
 
 const getIcon = (type) => {
   switch (type) {
@@ -118,7 +117,7 @@ const MediaLibrary = () => {
           <div className="grid md:grid-cols-2">
             <div className="relative h-64 md:h-auto">
               <img
-                src="https://images.unsplash.com/photo-1703192103626-1433302256e5"
+                src="https://qfmdmxmcybtllycxygdd.supabase.co/storage/v1/object/public/media/story_1762795528659.png"
                 alt="Bharat Jodo Yatra"
                 className="w-full h-full object-cover"
               />
